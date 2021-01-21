@@ -30,63 +30,64 @@ class GeoHashArea {
   Map<String, List<GeoHashPoint>> hashToPoints = {};
   int precision;
 
-  GeoHashArea(this.points, {this.radius = 9999}) {
+  GeoHashArea(this.points, {this.radius = double.infinity}) {
     precision = Util.setPrecision(radius);
 
     /// create geohash map with given precision (radius)
     points.forEach((point) {
-      final hashkey = point.hash.substring(0, precision);
-      if (!hashToPoints.containsKey(hashkey)) {
-        hashToPoints[hashkey] = [point];
+      final hash = point.hash.substring(0, precision);
+      if (!hashToPoints.containsKey(hash)) {
+        hashToPoints[hash] = [point];
       } else {
-        hashToPoints[hashkey].add(point);
+        hashToPoints[hash].add(point);
       }
     });
   }
 
-  /// Get all points within [radius] of [center], sorted by distance.
-  List<DistancePoint> within(GeoHashPoint center) {
+  /// Get all points within [radius] of [center].
+  List<DistancePoint> within(GeoHashPoint center, {bool sorted = true}) {
     final centerHash = center.hash.substring(0, precision);
     final areaHashes = GeoHashPoint.neighborsOf(hash: centerHash)
       ..add(centerHash);
 
-    return areaHashes
-        .where((areaHash) => hashToPoints.keys.contains(areaHash))
-        .map((e) => hashToPoints[e])
+    final pointsIn = areaHashes
+        .map((h) => hashToPoints[h])
+        .where((points) => points != null)
         .expand((points) => points) // flatten list of geoHashPoints
         .map((point) => DistancePoint(
             point, center.distance(lat: point.latitude, lng: point.longitude)))
         .where((areaPoint) => areaPoint.distance <= radius * 1.02)
-        .toList()
-          ..sort();
+        .toList();
+    if (sorted) {
+      pointsIn.sort();
+      return pointsIn;
+    }
+    return pointsIn;
   }
 }
 
-/// Non optimized storage of points in a list.
+/// Less optimized storage of points in a list, but more flexible.
 class GeoHashCollection {
   List<GeoHashPoint> points;
 
   GeoHashCollection(this.points);
 
-  /// Will iterate though all points, filter out those that do not have a geohash
-  /// prefix among the geohashes [radius] distance from [center], and return
-  /// points sorted.
+  /// Will iterate though all points, filter on distance from [center],
+  /// and return points sorted.
   List<DistancePoint> within({
     @required GeoHashPoint center,
     @required double radius,
+    bool sorted = true,
   }) {
-    final precision = Util.setPrecision(radius);
-    final centerHash = center.hash.substring(0, precision);
-    final areaHashes = GeoHashPoint.neighborsOf(hash: centerHash)
-      ..add(centerHash);
-
-    return points
-        .where((point) =>
-            areaHashes.any((hashString) => point.hash.startsWith(hashString)))
+    final pointsIn = points
         .map((point) => DistancePoint(
             point, center.distance(lat: point.latitude, lng: point.longitude)))
         .where((collectionPoint) => collectionPoint.distance <= radius * 1.02)
-        .toList()
-          ..sort();
+        .toList();
+    if (sorted) {
+      pointsIn.sort();
+      return pointsIn;
+    }
+    return pointsIn;
   }
 }

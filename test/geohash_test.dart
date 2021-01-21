@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:test/test.dart';
 import 'package:geohash_tools/geohash_tools.dart';
 
@@ -73,5 +75,33 @@ void main() {
           reason: 'Returns sorted');
     });
 
+  });
+
+  test("Test performance", () {
+
+    final r = Random(42);
+    final center = GeoHashPoint(2, 2);
+    final radius = 50.0;
+
+    final pointCollection = List.generate(100000, (index) {
+      int latMin = 0, latMax = 4;
+      int lngMin = 0, lngMax = 4;
+      // generate random coordinates within bounds
+      double lat = (latMin + r.nextInt(latMax - latMin)) * r.nextDouble();
+      double lng = (lngMin + r.nextInt(lngMax - lngMin)) * r.nextDouble();
+      return GeoHashPoint(lat, lng);
+    });
+
+    final geoHashCollection = GeoHashCollection(pointCollection);
+    final stopwatch = Stopwatch()..start();
+    final pointsIn = geoHashCollection.within(center: center, radius: radius, sorted: true);
+    print('geoHashCollection.within(radius: $radius km) executed in ${stopwatch.elapsed.inMilliseconds} ms. Found ${pointsIn.length} points.');
+
+    final geoHashArea = GeoHashArea(pointCollection, radius: radius);
+    stopwatch..reset()..start();
+    final pointsIn2 = geoHashArea.within(center, sorted: true);
+    print('geoHashArea.within(radius: $radius km) executed in ${stopwatch.elapsed.inMilliseconds} ms. Found ${pointsIn2.length} points.');
+
+    // geoHashArea.within(radius: 100.0 km) executed in 34 ms. Found 5643 points.
   });
 }
