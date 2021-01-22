@@ -74,7 +74,8 @@ class GeoHashArea {
     return areaHashes
         .map((h) => hashToPoints[h])
         .where((points) => points != null)
-        .expand((points) => points);
+        .expand((points) => points)
+        .toSet();
   }
 }
 

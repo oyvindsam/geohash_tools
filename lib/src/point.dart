@@ -9,17 +9,17 @@ class GeoHashPoint {
   double _longitude;
   String _hash;
 
-  GeoHashPoint(this._hash) {
-    assert(_hash == null);
-    final decoded = _util.decode(_hash);
-    _latitude = decoded['latitude'];
-    _longitude = decoded['longitude'];
-  }
-
-  GeoHashPoint.fromLatLong(this._latitude, this._longitude) {
+  GeoHashPoint(this._latitude, this._longitude) {
     assert(latitude != null);
     assert(longitude != null);
     _hash = _util.encode(latitude, longitude, 9);
+  }
+
+  GeoHashPoint.fromHash(this._hash) {
+    assert(_hash != null);
+    final decoded = _util.decode(_hash);
+    _latitude = decoded['latitude'];
+    _longitude = decoded['longitude'];
   }
 
   /// return geographical distance between two coordinates
