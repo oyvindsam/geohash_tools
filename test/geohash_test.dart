@@ -58,12 +58,12 @@ void main() {
 
     test('GeoHashCollection within calculation', () {
       final within0 = GeoHashCollection([point1, point2, point3])
-          .within(center: center, radius: 0);
+          .withinDistance(center: center, radius: 0);
       expect(0, equals(within0.length),
           reason: 'Radius 0 should have 0 within.');
 
       final within1 = GeoHashCollection([point1, point2, point3])
-          .within(center: center, radius: dist_c1);
+          .withinDistance(center: center, radius: dist_c1);
       expect(within1.map((e) => e.point), equals([point1]), reason: 'Radius dist_c1 should have only p1 within.');
 
       final pointsSorted = [point1, point2, point3];
@@ -94,8 +94,8 @@ void main() {
 
     final geoHashCollection = GeoHashCollection(pointCollection);
     final stopwatch = Stopwatch()..start();
-    final pointsIn = geoHashCollection.within(center: center, radius: radius, sorted: true);
-    print('geoHashCollection.within(radius: $radius km) executed in ${stopwatch.elapsed.inMilliseconds} ms. Found ${pointsIn.length} points.');
+    final pointsIn = geoHashCollection.withinDistance(center: center, radius: radius, sorted: true);
+    print('geoHashCollection.withinDi(radius: $radius km) executed in ${stopwatch.elapsed.inMilliseconds} ms. Found ${pointsIn.length} points.');
 
     List.generate(10, (index) {
       final geoHashArea = GeoHashArea(pointCollection, radius: radius);
