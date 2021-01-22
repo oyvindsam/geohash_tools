@@ -70,7 +70,7 @@ void main() {
       final pointsReversed = pointsSorted.reversed.toList();
       final gfcReverse = GeoHashArea(pointsReversed, radius: dist_c3);
       final withinSorted = gfcReverse.withinDistance(center).map((e) => e.point);
-
+      print(gfcReverse.withinDistance(center));
       expect(withinSorted, containsAllInOrder(pointsSorted),
           reason: 'Returns sorted');
     });
@@ -101,7 +101,7 @@ void main() {
       final geoHashArea = GeoHashArea(pointCollection, radius: radius);
       stopwatch..reset()..start();
       final pointsIn2 = geoHashArea.withinDistance(center, sorted: true);
-      print('geoHashArea.within(radius: $radius km) executed in ${stopwatch.elapsed.inMilliseconds} ms. Found ${pointsIn2.length} points.');
+      print('geoHashArea.withinDistance(radius: $radius km) executed in ${stopwatch.elapsed.inMilliseconds} ms. Found ${pointsIn2.length} points.');
     });
 
 

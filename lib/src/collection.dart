@@ -44,8 +44,8 @@ class GeoHashArea {
     });
   }
 
-  /// Get all points within [radius] of [center].
-  List<DistancePoint> withinDistance(GeoHashPoint center, {bool sorted = true}) {
+  /// Get all points within [radius] of [center]. Include distance.
+  List<DistancePoint> withinDistance(GeoHashPoint center, {sorted = true}) {
     final centerHash = center.hash.substring(0, precision);
     final areaHashes = GeoHashPoint.neighborsOf(hash: centerHash)
       ..add(centerHash);
