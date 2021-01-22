@@ -25,14 +25,14 @@ void main() {
   group('Collection tests', () {
     test('GeoHashArea within calculation', () {
       final within0 =
-      GeoHashArea([point1, point2, point3], radius: 0).within(center);
+      GeoHashArea([point1, point2, point3], radius: 0).withinDistance(center);
       expect(0, equals(within0.length),
           reason: 'Radius 0 should have 0 within.');
 
       final dist_c1 =
       center.distance(lat: point1.latitude, lng: point1.longitude);
       final within1 = GeoHashArea([point1, point2, point3], radius: dist_c1)
-          .within(center)
+          .withinDistance(center)
           .map((e) => e.point);
       expect(within1, contains(point1),
           reason: 'Distance to point 1 should be within');
@@ -40,7 +40,7 @@ void main() {
       final dist_c2 =
       center.distance(lat: point2.latitude, lng: point2.longitude);
       final within2 = GeoHashArea([point1, point2, point3], radius: dist_c2)
-          .within(center)
+          .withinDistance(center)
           .map((e) => e.point);
       expect(within2, containsAll([point1, point2]),
           reason: 'Distance to point 2 should be within');
@@ -50,7 +50,7 @@ void main() {
       final pointsSorted = [point1, point2, point3];
       final pointsReversed = pointsSorted.reversed.toList();
       final gfcReverse = GeoHashArea(pointsReversed, radius: 9999);
-      final withinSorted = gfcReverse.within(center).map((e) => e.point);
+      final withinSorted = gfcReverse.withinDistance(center).map((e) => e.point);
 
       expect(withinSorted, containsAllInOrder(pointsSorted),
           reason: 'Returns sorted');
@@ -69,7 +69,7 @@ void main() {
       final pointsSorted = [point1, point2, point3];
       final pointsReversed = pointsSorted.reversed.toList();
       final gfcReverse = GeoHashArea(pointsReversed, radius: dist_c3);
-      final withinSorted = gfcReverse.within(center).map((e) => e.point);
+      final withinSorted = gfcReverse.withinDistance(center).map((e) => e.point);
 
       expect(withinSorted, containsAllInOrder(pointsSorted),
           reason: 'Returns sorted');
@@ -97,10 +97,13 @@ void main() {
     final pointsIn = geoHashCollection.within(center: center, radius: radius, sorted: true);
     print('geoHashCollection.within(radius: $radius km) executed in ${stopwatch.elapsed.inMilliseconds} ms. Found ${pointsIn.length} points.');
 
-    final geoHashArea = GeoHashArea(pointCollection, radius: radius);
-    stopwatch..reset()..start();
-    final pointsIn2 = geoHashArea.within(center, sorted: true);
-    print('geoHashArea.within(radius: $radius km) executed in ${stopwatch.elapsed.inMilliseconds} ms. Found ${pointsIn2.length} points.');
+    List.generate(10, (index) {
+      final geoHashArea = GeoHashArea(pointCollection, radius: radius);
+      stopwatch..reset()..start();
+      final pointsIn2 = geoHashArea.withinDistance(center, sorted: true);
+      print('geoHashArea.within(radius: $radius km) executed in ${stopwatch.elapsed.inMilliseconds} ms. Found ${pointsIn2.length} points.');
+    });
+
 
     // geoHashArea.within(radius: 100.0 km) executed in 34 ms. Found 5643 points.
   });
