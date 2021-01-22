@@ -4,10 +4,10 @@ import 'package:test/test.dart';
 import 'package:geohash_tools/geohash_tools.dart';
 
 void main() {
-  final center = GeoHashPoint(65.0, 15.0); // center
-  final point1 = GeoHashPoint(65.5, 15.0); // close
-  final point2 = GeoHashPoint(66.0, 15.0); // further away
-  final point3 = GeoHashPoint(63.0, 12.0); // farthest away
+  final center = GeoHashPoint.fromLatLong(65.0, 15.0); // center
+  final point1 = GeoHashPoint.fromLatLong(65.5, 15.0); // close
+  final point2 = GeoHashPoint.fromLatLong(66.0, 15.0); // further away
+  final point3 = GeoHashPoint.fromLatLong(63.0, 12.0); // farthest away
 
   final dist_c1 = center.distance(lat: point1.latitude, lng: point1.longitude);
   final dist_1c = point1.distance(lat: center.latitude, lng: center.longitude);
@@ -80,8 +80,8 @@ void main() {
   test("Test performance", () {
 
     final r = Random(42);
-    final center = GeoHashPoint(2, 2);
-    final radius = 50.0;
+    final center = GeoHashPoint.fromLatLong(2, 2);
+    final radius = 100.0;
 
     final pointCollection = List.generate(100000, (index) {
       int latMin = 0, latMax = 4;
@@ -89,7 +89,7 @@ void main() {
       // generate random coordinates within bounds
       double lat = (latMin + r.nextInt(latMax - latMin)) * r.nextDouble();
       double lng = (lngMin + r.nextInt(lngMax - lngMin)) * r.nextDouble();
-      return GeoHashPoint(lat, lng);
+      return GeoHashPoint.fromLatLong(lat, lng);
     });
 
     final geoHashCollection = GeoHashCollection(pointCollection);

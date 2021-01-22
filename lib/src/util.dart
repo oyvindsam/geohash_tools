@@ -157,12 +157,14 @@ class Util {
   ///
   /// Neighbors
   /// Returns all neighbors' hashstrings clockwise from north around to northwest
+  /// Optionally pass already computed decoded hash.
   /// 7 0 1
   /// 6 X 2
   /// 5 4 3
-  List<String> neighbors(String hashString) {
+  List<String> neighbors(String hashString, {Map<String, double> decoded}) {
+
     int hashStringLength = hashString.length;
-    var lonlat = decode(hashString);
+    var lonlat = decoded != null ? decoded : decode(hashString);
     double lat = lonlat['latitude'];
     double lon = lonlat['longitude'];
     double latErr = lonlat['latitudeError'] * 2;
@@ -250,6 +252,8 @@ class Util {
   // Cutoff for floating point calculations
   static const double EPSILON = 1e-12;
 
+  static const double radius = (EARTH_EQ_RADIUS + EARTH_POLAR_RADIUS) / 2;
+
   static double distance(Coordinates location1, Coordinates location2) {
     return calcDistance(location1.latitude, location1.longitude,
         location2.latitude, location2.longitude);
@@ -258,7 +262,6 @@ class Util {
   static double calcDistance(
       double lat1, double long1, double lat2, double long2) {
     // Earth's mean radius in meters
-    final double radius = (EARTH_EQ_RADIUS + EARTH_POLAR_RADIUS) / 2;
     double latDelta = _toRadians(lat1 - lat2);
     double lonDelta = _toRadians(long1 - long2);
 
