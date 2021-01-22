@@ -26,7 +26,7 @@ class Util {
   /// the geohash.
   /// @type Array
   // Desired sig figs:    0  1  2  3   4   5   6   7   8   9  10
-  var sigfigHashLength = [0, 5, 7, 8, 11, 12, 13, 15, 16, 17, 18];
+  static const sigfigHashLength = [0, 5, 7, 8, 11, 12, 13, 15, 16, 17, 18];
 
   ///
   /// Encode
@@ -161,10 +161,10 @@ class Util {
   /// 7 0 1
   /// 6 X 2
   /// 5 4 3
-  List<String> neighbors(String hashString, {Map<String, double> decoded}) {
+  List<String> neighbors(String hashString) {
 
     int hashStringLength = hashString.length;
-    var lonlat = decoded != null ? decoded : decode(hashString);
+    final lonlat = decode(hashString);
     double lat = lonlat['latitude'];
     double lon = lonlat['longitude'];
     double latErr = lonlat['latitudeError'] * 2;
@@ -178,7 +178,7 @@ class Util {
       return encode(neighborLat, neighborLon, hashStringLength);
     }
 
-    var neighborHashList = [
+    final neighborHashList = [
       encodeNeighbor(1, 0),
       encodeNeighbor(1, 1),
       encodeNeighbor(0, 1),
