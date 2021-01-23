@@ -1,6 +1,6 @@
 name: geohash_tools
 description: GeoHashTools is an open-source library that allows you to create and query on geohash locations. It is heavily based on GeoFlutterFire, https://github.com/DarshanGowda0/GeoFlutterFire.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/oyvindsam/geohash_tools
 
 environment:
