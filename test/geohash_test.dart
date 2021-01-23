@@ -116,8 +116,8 @@ void main() {
     expect(5, e2.length);
 
     final d = GeoHashToolsUtil.decode(e1);
-    expect(true, pow(d['latitude'] - 10.5, 2) < 0.1); // should be low diff
-    expect(true, pow(d['longitude'] - 10, 2) < 0.1); // should be low diff
+    expect(true, pow(d.latitude - 10.5, 2) < 0.1); // should be low diff
+    expect(true, pow(d.longitude - 10, 2) < 0.1); // should be low diff
 
   });
 
