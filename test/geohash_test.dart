@@ -108,4 +108,17 @@ void main() {
     // geoHashArea.within(radius: 100.0 km) executed in 34 ms. Found 5643 points.
   });
 
+  test('utils', () {
+    final e1 = GeoHashToolsUtil.encode(10.5, 10);
+    expect(9, e1.length);
+
+    final e2 = GeoHashToolsUtil.encode(10.5, 10, numberOfChars: 5);
+    expect(5, e2.length);
+
+    final d = GeoHashToolsUtil.decode(e1);
+    expect(true, pow(d['latitude'] - 10.5, 2) < 0.1); // should be low diff
+    expect(true, pow(d['longitude'] - 10, 2) < 0.1); // should be low diff
+
+  });
+
 }

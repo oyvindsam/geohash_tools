@@ -31,7 +31,7 @@ class GeoHashArea {
   int precision;
 
   GeoHashArea(this.points, {this.radius = double.infinity}) {
-    precision = Util.setPrecision(radius);
+    precision = GeoHashToolsUtil.setPrecision(radius);
 
     /// create geohash map with given precision (radius)
     points.forEach((point) {

@@ -2,9 +2,7 @@ import 'package:meta/meta.dart';
 
 import 'util.dart';
 
-// TODO: make abstract, with no implementation of get coords?
 class GeoHashPoint {
-  static Util _util = Util();
   double _latitude;
   double _longitude;
   String _hash;
@@ -12,12 +10,12 @@ class GeoHashPoint {
   GeoHashPoint(this._latitude, this._longitude) {
     assert(latitude != null);
     assert(longitude != null);
-    _hash = _util.encode(latitude, longitude, 9);
+    _hash = GeoHashToolsUtil.encode(latitude, longitude, numberOfChars: 9);
   }
 
   GeoHashPoint.fromHash(this._hash) {
     assert(_hash != null);
-    final decoded = _util.decode(_hash);
+    final decoded = GeoHashToolsUtil.decode(_hash);
     _latitude = decoded['latitude'];
     _longitude = decoded['longitude'];
   }
@@ -25,12 +23,12 @@ class GeoHashPoint {
   /// return geographical distance between two coordinates
   static double distanceBetween(
       {@required Coordinates to, @required Coordinates from}) {
-    return Util.distance(to, from);
+    return GeoHashToolsUtil.distance(to, from);
   }
 
   /// return neighboring geo-hashes of [hash]
   static List<String> neighborsOf({@required String hash}) {
-    return _util.neighbors(hash);
+    return GeoHashToolsUtil.neighbors(hash);
   }
 
   /// return hash of [GeoHashPoint]
@@ -47,7 +45,7 @@ class GeoHashPoint {
 
   /// return all neighbors of [GeoHashPoint]
   List<String> get neighbors {
-    return _util.neighbors(this._hash);
+    return GeoHashToolsUtil.neighbors(this._hash);
   }
 
   /// return distance between [GeoHashPoint] and ([lat], [lng])
