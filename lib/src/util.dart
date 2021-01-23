@@ -137,8 +137,17 @@ class GeoHashToolsUtil {
 
   ///
   /// Decode a [hashString] into a pair of latitude and longitude.
+  static Coordinates decode(String hashString) {
+    List<double> bbox = _decodeBbox(hashString);
+    final lat = (bbox[0] + bbox[2]) / 2;
+    final lng = (bbox[1] + bbox[3]) / 2;
+    return Coordinates(lat, lng);
+  }
+
+  ///
+  /// Decode a [hashString] into a pair of latitude and longitude.
   /// A map is returned with keys 'latitude', 'longitude','latitudeError','longitudeError'
-  static Map<String, double> decode(String hashString) {
+  static Map<String, double> decodeWithError(String hashString) {
     List<double> bbox = _decodeBbox(hashString);
     final lat = (bbox[0] + bbox[2]) / 2;
     final lon = (bbox[1] + bbox[3]) / 2;
@@ -162,7 +171,7 @@ class GeoHashToolsUtil {
   /// [1,0] - north
   /// [1,1] - northeast
   static String neighbor(String hashString, List<int> direction) {
-    final lonLat = decode(hashString);
+    final lonLat = decodeWithError(hashString);
     final neighborLat =
         lonLat['latitude'] + direction[0] * lonLat['latitudeError'] * 2;
     final neighborLon =
@@ -179,7 +188,7 @@ class GeoHashToolsUtil {
   /// 5 4 3
   static List<String> neighbors(String hashString) {
     int hashStringLength = hashString.length;
-    final lonlat = decode(hashString);
+    final lonlat = decodeWithError(hashString);
     double lat = lonlat['latitude'];
     double lon = lonlat['longitude'];
     double latErr = lonlat['latitudeError'] * 2;

@@ -16,8 +16,8 @@ class GeoHashPoint {
   GeoHashPoint.fromHash(this._hash) {
     assert(_hash != null);
     final decoded = GeoHashToolsUtil.decode(_hash);
-    _latitude = decoded['latitude'];
-    _longitude = decoded['longitude'];
+    _latitude = decoded.latitude;
+    _longitude = decoded.longitude;
   }
 
   /// return geographical distance between two coordinates
